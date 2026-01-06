@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+  karoseri360_grpc:
+    image: paruliano/karoseri360_grpc:latest
+    environment:
+      HTTP_HOST: "0.0.0.0:7000"
+      GRPC_HOST: "0.0.0.0:7001"
+      DB_DEBUG: "true"
+      DB_USER: "app"
+      DB_PASSWORD: "qwerty84"
+      DB_HOST: "mysql"
+      DB_PORT: "3306"
+      DB_NAME: "karoseri"
+      MYSQL_URL: "app:qwerty84@tcp(mysql:3306)/karoseri?charset=utf8mb4&parseTime=True&loc=UTC"
+      REDIS_HOST: "redis:6379"
+    ports:
+      - "7000:7000"
+      - "7001:7001"
+    depends_on:
+      - mysql
+      - redis
+      - nsqlookupd
+      - nsqd
+
+  karoseri360_fe:
+    image: paruliano/karoseri360_fe:latest
+    environment:
+      PORT: "7090"
+      GRPC_ENDPOINT: "karoseri360_grpc:7001"
+    ports:
+      - "7090:7090"
+    depends_on:
+      - karoseri360_grpc
+      - redis
+      - nsqlookupd
+      - nsqd
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: "karoseri"
+      MYSQL_USER: "app"
+      MYSQL_PASSWORD: "qwerty84"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  nsqlookupd:
+    image: nsqio/nsq:latest
+    command: ["/nsqlookupd"]
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+
+  nsqd:
+    image: nsqio/nsq:latest
+    command: ["/nsqd", "--lookupd-tcp-address=nsqlookupd:4160"]
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+    depends_on:
+      - nsqlookupd
+
+  nsqadmin:
+    image: nsqio/nsq:latest
+    command: ["/nsqadmin", "--lookupd-http-address=nsqlookupd:4161"]
+    ports:
+      - "4171:4171"
+    depends_on:
+      - nsqlookupd
+
+volumes:
+  mysql_data:
