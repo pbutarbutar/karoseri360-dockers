@@ -37,7 +37,7 @@ services:
       - nsqd
 
   mysql:
-    image: mysql:8.0
+    image: ubuntu/mysql:8.0-22.04_edge
     environment:
       MYSQL_DATABASE: "karoseri"
       MYSQL_USER: "app"
