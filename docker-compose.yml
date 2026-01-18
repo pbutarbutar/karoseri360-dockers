@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   karoseri360_grpc:
-    image: paruliano/karoseri360_grpc:latest
+    image: paruliano/karoseri360_grpc:v1.0.0
     environment:
       HTTP_HOST: "0.0.0.0:7000"
       GRPC_HOST: "0.0.0.0:7001"
@@ -24,7 +24,7 @@ services:
       - nsqd
 
   karoseri360_fe:
-    image: paruliano/karoseri360_fe:latest
+    image: paruliano/karoseri360_fe:karoseri360_fe:v1.0.0
     environment:
       PORT: "7090"
       GRPC_ENDPOINT: "karoseri360_grpc:7001"
