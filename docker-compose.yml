@@ -4,15 +4,15 @@ services:
   karoseri360_grpc:
     image: paruliano/karoseri360_grpc:v1.0.4
     environment:
-      HTTP_HOST: "0.0.0.0:7000"
-      GRPC_HOST: "0.0.0.0:7001"
+      HTTP_HOST: ${HTTP_HOST}
+      GRPC_HOST: ${GRPC_HOST}
       DB_DEBUG: "true"
-      DB_USER: "app"
-      DB_PASSWORD: "qwerty84"
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_HOST: "mysql"
       DB_PORT: "3306"
-      DB_NAME: "karoseri"
-      MYSQL_URL: "app:qwerty84@tcp(mysql:3306)/karoseri?charset=utf8mb4&parseTime=True&loc=UTC"
+      DB_NAME: ${MYSQL_DATABASE}
+      MYSQL_URL: "${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(mysql:3306)/${MYSQL_DATABASE}?charset=utf8mb4&parseTime=True&loc=UTC"
       REDIS_HOST: "redis:6379"
     ports:
       - "7000:7000"
@@ -27,7 +27,14 @@ services:
     image: paruliano/karoseri360_fe:v1.0.4
     environment:
       PORT: "7090"
-      GRPC_ENDPOINT: "karoseri360_grpc:7001"
+      GRPC_ENDPOINT: ${GRPC_ENDPOINT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: "3306"
+      DB_USER: ${DB_HOST}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_BACKUP_DIR: "backups"
+      SESSION_SECRET: "9943kmfsdgdmgdjkik93493ujjfgdkgdkgkgkdgk535"
     ports:
       - "7090:7090"
     depends_on:
@@ -41,10 +48,10 @@ services:
     image: mysql:8.0
     platform: linux/amd64
     environment:
-      MYSQL_DATABASE: "karoseri"
-      MYSQL_USER: "app"
-      MYSQL_PASSWORD: "qwerty84"
-      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:

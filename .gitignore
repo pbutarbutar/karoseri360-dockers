@@ -1,0 +1,49 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go build artifacts
+/bin/
+/build/
+/vendor/
+/uploads/
+/dist/
+/release/
+
+backups/
+
+# Go modules
+/pkg/mod/
+
+# IDE / Editor
+.vscode/
+.idea/
+.cache/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env / Config
+.env
+*.local
+*.secret
+config.yaml
+config.json
+
+# Cache
+/.cache/
+/tmp/
+
+/coverage/
+coverage.out
