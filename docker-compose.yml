@@ -55,7 +55,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - /opt/mysql/data:/var/lib/mysql 
 
   redis:
     image: redis:7
