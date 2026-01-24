@@ -3,6 +3,7 @@ version: "3.9"
 services:
   karoseri360_grpc:
     image: paruliano/karoseri360_grpc:v1.0.4
+    restart: always
     environment:
       HTTP_HOST: ${HTTP_HOST}
       GRPC_HOST: ${GRPC_HOST}
@@ -25,6 +26,7 @@ services:
 
   karoseri360_fe:
     image: paruliano/karoseri360_fe:v1.0.4
+    restart: always
     environment:
       PORT: "7090"
       GRPC_ENDPOINT: ${GRPC_ENDPOINT}
@@ -47,6 +49,7 @@ services:
   mysql:
     image: mysql:8.0
     platform: linux/amd64
+    restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -59,11 +62,13 @@ services:
 
   redis:
     image: redis:7
+    restart: always
     ports:
       - "6379:6379"
 
   nsqlookupd:
     image: nsqio/nsq:latest
+    restart: always
     command: ["/nsqlookupd"]
     ports:
       - "4160:4160"
@@ -80,6 +85,7 @@ services:
 
   nsqadmin:
     image: nsqio/nsq:latest
+    restart: always
     command: ["/nsqadmin", "--lookupd-http-address=nsqlookupd:4161"]
     ports:
       - "4171:4171"
